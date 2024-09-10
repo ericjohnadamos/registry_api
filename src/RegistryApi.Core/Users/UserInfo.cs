@@ -1,17 +1,9 @@
 ﻿namespace RegistryApi.Core.Users;
 
-public class UserInfo
+public class UserInfo(int userId, string username, string customerKey, string timeZoneId)
 {
-    public UserInfo(int userId, string username, string customerKey, string timeZoneId)
-    {
-        UserId = userId;
-        Username = username;
-        CustomerKey = customerKey;
-        TimeZoneId = timeZoneId;
-    }
-
-    public int UserId { get; }
-    public string Username { get; }
-    public string CustomerKey { get; }
-    public string TimeZoneId { get; }
+    public int UserId { get; } = userId;
+    public string Username { get; } = username;
+    public string CustomerKey { get; } = customerKey;
+    public string TimeZoneId { get; } = timeZoneId;
 }

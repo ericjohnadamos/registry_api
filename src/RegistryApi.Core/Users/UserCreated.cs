@@ -2,10 +2,7 @@
 
 namespace RegistryApi.Core.Users;
 
-public class UserCreated : DomainEventBase
+public class UserCreated(User newUser) : DomainEventBase
 {
-    public UserCreated(User newUser)
-        => NewUser = newUser;
-
-    public User NewUser { get; }
+    public User NewUser { get; } = newUser;
 }
