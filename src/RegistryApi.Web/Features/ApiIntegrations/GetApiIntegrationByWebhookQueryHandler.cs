@@ -25,9 +25,8 @@ public class GetApiIntegrationByWebhookQueryHandler
         GetApiIntegrationByWebhookQuery request, CancellationToken cancellationToken)
     {
         var specification = new MatchingWebhookSecretSpecification(request.WebhookSecret);
-        var integration = await this.repository.FirstOrDefaultAsync(specification);
-        if (integration == null)
-            throw new NotFoundException($"When trying to find api integration with the web hook secret of '{request.WebhookSecret}', nothing came up. Please ensure that you are passing the correct web hook secret and in proper hashing.");
+        var integration = await this.repository.FirstOrDefaultAsync(specification)
+            ?? throw new NotFoundException($"When trying to find api integration with the web hook secret of '{request.WebhookSecret}', nothing came up. Please ensure that you are passing the correct web hook secret and in proper hashing.");
         return integration;
     }
 }

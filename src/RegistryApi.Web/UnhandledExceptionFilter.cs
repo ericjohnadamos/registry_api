@@ -8,22 +8,14 @@ namespace RegistryApi.Web;
 /// <summary>
 ///     Filter for processing unhandled exceptions that occur in the ASP.NET MVC pipeline
 /// </summary>
-public class UnhandledApiExceptionFilter
-    : IExceptionFilter
+/// <remarks>
+///     Filter for processing unhandled exceptions that occur in the ASP.NET MVC pipeline
+/// </remarks>
+/// <param name="logger"> Logger instance for the <see cref="UnhandledApiExceptionFilter" />. </param>
+/// <param name="apiErrorFactory"> Factory for converting exceptions into <see cref="ApiError" />. </param>
+public class UnhandledApiExceptionFilter(ILogger<UnhandledApiExceptionFilter> logger, ApiErrorFactory apiErrorFactory)
+        : IExceptionFilter
 {
-    private readonly ApiErrorFactory _apiErrorFactory;
-    private readonly ILogger<UnhandledApiExceptionFilter> _logger;
-
-    /// <summary>
-    ///     Filter for processing unhandled exceptions that occur in the ASP.NET MVC pipeline
-    /// </summary>
-    /// <param name="logger"> Logger instance for the <see cref="UnhandledApiExceptionFilter" />. </param>
-    /// <param name="apiErrorFactory"> Factory for converting exceptions into <see cref="ApiError" />. </param>
-    public UnhandledApiExceptionFilter(ILogger<UnhandledApiExceptionFilter> logger, ApiErrorFactory apiErrorFactory)
-    {
-        _logger = logger;
-        _apiErrorFactory = apiErrorFactory;
-    }
 
     /// <summary>
     ///     Occurs when the exception is thrown
@@ -31,12 +23,12 @@ public class UnhandledApiExceptionFilter
     /// <param name="context"> Information about the current unhandled exception </param>
     public void OnException(ExceptionContext context)
     {
-        _logger.LogError(context.Exception, context.Exception.Message);
-        var errorResults = _apiErrorFactory.ParseException(context.Exception);
+        logger.LogError(context.Exception, message: context.Exception.Message);
+        var (ApiErrors, StatusCode) = apiErrorFactory.ParseException(context.Exception);
 
-        var jsonResult = new JsonResult(new ApiErrorResponse { Errors = errorResults.ApiErrors })
+        var jsonResult = new JsonResult(new ApiErrorResponse { Errors = ApiErrors })
         {
-            StatusCode = (int) errorResults.StatusCode
+            StatusCode = (int) StatusCode
         };
         context.Result = jsonResult;
     }

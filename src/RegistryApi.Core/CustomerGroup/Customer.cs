@@ -5,9 +5,9 @@ using RegistryApi.SharedKernel;
 
 public class Customer : IEntity
 {
-    private readonly List<Guest> _guests = new();
-    private readonly List<CustomerLanguage> _languages = new();
-    private readonly List<Stay> _stays = new();
+    private readonly List<Guest> _guests = [];
+    private readonly List<CustomerLanguage> _languages = [];
+    private readonly List<Stay> _stays = [];
     public string? Name { get; private set; }
     public bool ExcludeFromApi { get; private set; }
     public string? PrimaryPhone { get; private set; }

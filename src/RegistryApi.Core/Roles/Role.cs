@@ -2,7 +2,6 @@
 
 using RegistryApi.SharedKernel;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 public class Role : IEntity
 {
@@ -11,10 +10,7 @@ public class Role : IEntity
     }
 
     public int Id { get; private set; } = default!;
-
     public int ApplicationId { get; private set; } = default!;
-
     public string Name { get; private set; } = default!;
-
-    public ICollection<UsersInRole> UsersInRole { get; set; } = new Collection<UsersInRole>();
+    public ICollection<UsersInRole> UsersInRole { get; set; } = [];
 }

@@ -1,7 +1,7 @@
+namespace RegistryApi.Web;
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-
-namespace RegistryApi.Web;
 
 public class Program
 {

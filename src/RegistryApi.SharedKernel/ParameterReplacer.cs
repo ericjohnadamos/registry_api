@@ -1,6 +1,6 @@
-﻿using System.Linq.Expressions;
+﻿namespace RegistryApi.SharedKernel;
 
-namespace RegistryApi.SharedKernel;
+using System.Linq.Expressions;
 
 internal class ParameterReplacer : ExpressionVisitor
 {

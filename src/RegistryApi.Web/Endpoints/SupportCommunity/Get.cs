@@ -14,13 +14,9 @@ using System.Threading.Tasks;
 // always necessary.
 
 [ApiVersion("1.0")]
-public class Get : RegistryEndpointBase
+public class Get(IMediator mediator, IHttpContextAccessor httpContextAccessor)
+    : RegistryEndpointBase(mediator, httpContextAccessor)
 {
-    public Get(IMediator mediator, IHttpContextAccessor httpContextAccessor)
-        : base(mediator, httpContextAccessor)
-    {
-    }
-
     [Authorize]
     [HttpGet("/api/customer/support-community")]
     [HttpGet("/api/customer/supportcommunity")]
@@ -28,7 +24,7 @@ public class Get : RegistryEndpointBase
         Summary = "Get the list of customer stays",
         Description = "Get the list of customer stays",
         OperationId = "SupportCommunity.Get",
-        Tags = new[] { "SupportCommunity" })]
+        Tags = ["SupportCommunity"])]
     public async Task<GetCustomerStaysResponse> GetCustomerStays()
     {
         return await this.Mediator.Send(new GetCustomerStaysQuery(UserInfo, User));

@@ -48,7 +48,7 @@ public class Create : EndpointBaseAsync
         Summary = "Creates a new incoming message record",
         Description = "Creates a new incoming message record in the registry",
         OperationId = "IncomingMessages.Create",
-        Tags = new[] { "IncomingMessages" })]
+        Tags = ["IncomingMessages"])]
     public override async Task<ActionResult> HandleAsync(object json, CancellationToken cancellationToken = new())
     {
         this.logger.LogInformation($"Logging information from IncomingMessages.Create request: {json}");

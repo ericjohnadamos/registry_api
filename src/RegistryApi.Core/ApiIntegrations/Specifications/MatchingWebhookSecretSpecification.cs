@@ -4,14 +4,9 @@ using RegistryApi.SharedKernel;
 using System;
 using System.Linq.Expressions;
 
-public class MatchingWebhookSecretSpecification : Specification<ApiIntegration>
+public class MatchingWebhookSecretSpecification(string webhookSecret) : Specification<ApiIntegration>
 {
-    private readonly string webhookSecret;
-
-    public MatchingWebhookSecretSpecification(string webhookSecret)
-    {
-        this.webhookSecret = webhookSecret;
-    }
+    private readonly string webhookSecret = webhookSecret;
 
     public override Expression<Func<ApiIntegration, bool>> ToExpression()
         => integration => integration.Md5WebhookSecret == this.webhookSecret;

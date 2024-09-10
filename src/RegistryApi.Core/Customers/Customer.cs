@@ -10,6 +10,7 @@ public class Customer : IEntity
         Name = default!;
         Key = default!;
     }
+
     public int Id { get; private set; }
     public string Name { get; private set; }
     public string Key { get; private set; }

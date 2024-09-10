@@ -46,11 +46,11 @@ public class SlicktextSignatureAuthorizationAttribute : ActionFilterAttribute
             {
                 var claims = new List<Claim>()
                 {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ApiUserClaimTypes.Username, user.Username),
-                    new Claim(ApiUserClaimTypes.Password, user.Password),
-                    new Claim(ApiUserClaimTypes.CustomerKey, user.Customer.Key),
-                    new Claim(ApiUserClaimTypes.TimeZoneId, user.Customer?.TimeZoneId ?? ""),
+                    new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new(ApiUserClaimTypes.Username, user.Username),
+                    new(ApiUserClaimTypes.Password, user.Password),
+                    new(ApiUserClaimTypes.CustomerKey, user.Customer.Key),
+                    new(ApiUserClaimTypes.TimeZoneId, user.Customer?.TimeZoneId ?? ""),
                 };
 
                 foreach (var userRole in user.UsersInRole.Select(u => u.Role))

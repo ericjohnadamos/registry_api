@@ -1,17 +1,17 @@
-﻿using System;
-using System.Linq;
+﻿namespace RegistryApi.Core.CustomerGroup;
 
-namespace RegistryApi.Core.CustomerGroup;
+using System;
+using System.Linq;
 
 public sealed class CustomerStayStatus
 {
-    public static readonly CustomerStayStatus CheckedIn = new CustomerStayStatus("CheckedIn");
-    public static readonly CustomerStayStatus RequestList = new CustomerStayStatus("RequestList");
-    public static readonly CustomerStayStatus WaitList = new CustomerStayStatus("WaitList");
-    public static readonly CustomerStayStatus NoStatus = new CustomerStayStatus("NoStatus");
+    public static readonly CustomerStayStatus CheckedIn = new("CheckedIn");
+    public static readonly CustomerStayStatus RequestList = new("RequestList");
+    public static readonly CustomerStayStatus WaitList = new("WaitList");
+    public static readonly CustomerStayStatus NoStatus = new("NoStatus");
     public readonly string Name;
     private CustomerStayStatus(string name) => Name = name;
-    public static string[] ListNames() => new[] {CheckedIn.Name, RequestList.Name, WaitList.Name, NoStatus.Name};
+    public static string[] ListNames() => [CheckedIn.Name, RequestList.Name, WaitList.Name, NoStatus.Name];
 
     public static CustomerStayStatus Create(string name)
     {

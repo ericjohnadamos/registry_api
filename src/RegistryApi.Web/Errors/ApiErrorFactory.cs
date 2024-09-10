@@ -13,27 +13,25 @@ public class ApiErrorFactory
 {
     public (IEnumerable<ApiError> ApiErrors, HttpStatusCode StatusCode) ParseException(Exception exception)
     {
-        switch (exception)
+        return exception switch
         {
-            case NotFoundException notFoundException:
-                return ParseException(notFoundException);
-            case UserExistsException userExistsException:
-                return ParseException(userExistsException);
-            default:
-                return (new List<ApiError> { new ApiError("An unhandled exception has occurred. Please try your request again, or contact support.") },
-                    HttpStatusCode.InternalServerError);
-        }
+            NotFoundException notFoundException => ParseException(notFoundException),
+            UserExistsException userExistsException => ParseException(userExistsException),
+            _ => ((IEnumerable<ApiError> ApiErrors, HttpStatusCode StatusCode))(new List<ApiError>
+                { new("An unhandled exception has occurred. Please try your request again, or contact support.") },
+                HttpStatusCode.InternalServerError),
+        };
     }
 
-    private static (IEnumerable<ApiError> ApiErrors, HttpStatusCode StatusCode) ParseException(NotFoundException keyNotFoundException)
-        => ParseExceptionMessage(keyNotFoundException, HttpStatusCode.NotFound);
+    private static (IEnumerable<ApiError> ApiErrors, HttpStatusCode StatusCode) ParseException(
+        NotFoundException keyNotFoundException) => ParseExceptionMessage(keyNotFoundException, HttpStatusCode.NotFound);
 
-    private static (IEnumerable<ApiError> ApiErrors, HttpStatusCode StatusCode) ParseException(UserExistsException userExistsException)
-        => ParseExceptionMessage(userExistsException, HttpStatusCode.Conflict);
+    private static (IEnumerable<ApiError> ApiErrors, HttpStatusCode StatusCode) ParseException(
+        UserExistsException userExistsException) => ParseExceptionMessage(userExistsException, HttpStatusCode.Conflict);
 
-    private static (IEnumerable<ApiError> ApiErrors, HttpStatusCode StatusCode) ParseExceptionMessage(Exception exception, HttpStatusCode httpStatusCode)
-        => (new List<ApiError>
+    private static (IEnumerable<ApiError> ApiErrors, HttpStatusCode StatusCode) ParseExceptionMessage(
+        Exception exception, HttpStatusCode httpStatusCode) => (new List<ApiError>
         {
-            new ApiError(exception.Message)
+            new(exception.Message)
         }, httpStatusCode);
 }

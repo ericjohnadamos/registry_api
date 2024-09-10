@@ -1,4 +1,5 @@
 ﻿namespace RegistryApi.Web.Endpoints.IncomingMessages;
+
 public class IncomingMessageModel
 {
     public string Event { get; set; } = default!;

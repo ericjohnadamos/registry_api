@@ -12,22 +12,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using RegistryApi.Infrastructure.Data;
 
-public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Response<Unit>>
+public class CreateUserCommandHandler(
+	IUserRepository<User> userRepo,
+	IPasswordHasher<User> passwordHasher,
+    ILogger<CreateUserCommandHandler> logger
+) : IRequestHandler<CreateUserCommand, Response<Unit>>
 {
-	private readonly IPasswordHasher<User> passwordHasher;
-	private readonly IUserRepository<User> userRepo;
-	private readonly ILogger<CreateUserCommandHandler> logger;
-
-	public CreateUserCommandHandler(IUserRepository<User> userRepo, 
-		IPasswordHasher<User> passwordHasher,
-		ILogger<CreateUserCommandHandler> logger)
-	{
-		this.userRepo = userRepo;
-		this.passwordHasher = passwordHasher;
-		this.logger = logger;
-	}
-
-	public async Task<Response<Unit>> Handle(CreateUserCommand command, CancellationToken cancellationToken)
+    public async Task<Response<Unit>> Handle(CreateUserCommand command, CancellationToken cancellationToken)
 	{
 		logger.LogInformation($"Handling create user command for user: {command.Username}.");
 

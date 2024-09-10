@@ -1,6 +1,6 @@
-﻿using RegistryApi.SharedKernel;
+﻿namespace RegistryApi.Core.CustomerGroup;
 
-namespace RegistryApi.Core.CustomerGroup;
+using RegistryApi.SharedKernel;
 
 public class Guest : IEntity
 {

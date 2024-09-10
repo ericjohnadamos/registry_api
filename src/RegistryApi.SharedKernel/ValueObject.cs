@@ -1,18 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿namespace RegistryApi.SharedKernel;
 
-namespace RegistryApi.SharedKernel;
+using System.Collections.Generic;
+using System.Linq;
 
 public abstract class ValueObject
 {
     protected static bool EqualOperator(ValueObject left, ValueObject right)
     {
-        if (ReferenceEquals(left, null) ^ ReferenceEquals(right, null))
+        if (left is null ^ right is null)
         {
             return false;
         }
 
-        return ReferenceEquals(left, null) || left.Equals(right);
+        return left is null || left.Equals(right);
     }
 
     protected static bool NotEqualOperator(ValueObject left, ValueObject right)
@@ -34,8 +34,8 @@ public abstract class ValueObject
         using var otherValues = other.GetAtomicValues().GetEnumerator();
         while (thisValues.MoveNext() && otherValues.MoveNext())
         {
-            if (ReferenceEquals(thisValues.Current, null) ^
-                ReferenceEquals(otherValues.Current, null))
+            if (thisValues.Current is null ^
+                otherValues.Current is null)
             {
                 return false;
             }

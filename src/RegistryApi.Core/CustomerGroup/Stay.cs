@@ -1,7 +1,7 @@
-﻿using System;
-using RegistryApi.SharedKernel;
+﻿namespace RegistryApi.Core.CustomerGroup;
 
-namespace RegistryApi.Core.CustomerGroup;
+using System;
+using RegistryApi.SharedKernel;
 
 public class Stay : IEntity
 {
@@ -14,14 +14,18 @@ public class Stay : IEntity
     public DateTime? ExpectedCheckOut { get; private set; }
     public Customer Customer { get; private set; } = null!;
     public int Id { get; private set; }
+
     public CustomerStayStatus Status(DateTime today)
     {
         if (CheckInDateTime.HasValue && !CheckOutDateTime.HasValue)
             return CustomerStayStatus.CheckedIn;
-        if ((WaitListDateTime.HasValue && WaitListDateTime.Value.Date <= today)
+        if (   (WaitListDateTime.HasValue && WaitListDateTime.Value.Date <= today)
             && (ExpectedCheckOut == null || ExpectedCheckOut.Value.Date >= today))
             return CustomerStayStatus.WaitList;
-        if (WaitListDateTime == null || WaitListDateTime != null && WaitListDateTime.Value.Date >= today && (ExpectedCheckOut == null || ExpectedCheckOut.Value.Date >= today))
+        if (   WaitListDateTime == null
+            || WaitListDateTime != null
+            && WaitListDateTime.Value.Date >= today
+            && (ExpectedCheckOut == null || ExpectedCheckOut.Value.Date >= today))
             return CustomerStayStatus.RequestList;
         return CustomerStayStatus.NoStatus;
     }

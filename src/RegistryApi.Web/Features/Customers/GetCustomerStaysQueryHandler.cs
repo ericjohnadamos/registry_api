@@ -36,10 +36,7 @@ public class GetCustomerStaysQueryHandler
         this.systemClock = systemClock;
     }
 
-    public void Dispose()
-    {
-        this.staysReadRepository.Dispose();
-    }
+    public void Dispose() => this.staysReadRepository.Dispose();
 
     public async Task<GetCustomerStaysResponse> Handle(
         GetCustomerStaysQuery query, CancellationToken cancellationToken)

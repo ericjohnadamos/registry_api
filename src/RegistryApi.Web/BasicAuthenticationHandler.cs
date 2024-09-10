@@ -16,24 +16,16 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
-public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
+public class BasicAuthenticationHandler(
+    IMediator mediator,
+    IOptionsMonitor<AuthenticationSchemeOptions> options,
+    ILoggerFactory logger,
+    UrlEncoder encoder,
+    ISystemClock clock) : AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder, clock)
 {
-    private readonly IMediator mediator;
-
-    public BasicAuthenticationHandler(
-        IMediator mediator,
-        IOptionsMonitor<AuthenticationSchemeOptions> options,
-        ILoggerFactory logger,
-        UrlEncoder encoder,
-        ISystemClock clock)
-        : base(options, logger, encoder, clock)
-    {
-        this.mediator = mediator;
-    }
-
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
     {
-        if (!Request.Headers.ContainsKey("Authorization"))
+        if (!Request.Headers.TryGetValue("Authorization", out Microsoft.Extensions.Primitives.StringValues value))
             return AuthenticateResult.Fail("Missing Authorization Header");
 
         string username;
@@ -41,9 +33,9 @@ public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSc
 
         try
         {
-            var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
+            var authHeader = AuthenticationHeaderValue.Parse(value);
             var credentialBytes = Convert.FromBase64String(authHeader?.Parameter ?? "");
-            var credentials = Encoding.UTF8.GetString(credentialBytes).Split(new[] { ':' }, 2);
+            var credentials = Encoding.UTF8.GetString(credentialBytes).Split([':'], 2);
             username = credentials[0];
             password = credentials[1];
         }
@@ -52,17 +44,17 @@ public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSc
             return AuthenticateResult.Fail("Invalid Authorization Header");
         }
 
-        var userOption = await this.mediator.Send(new GetUserQuery(username, password));
+        var userOption = await mediator.Send(new GetUserQuery(username, password));
         return userOption.Match(
             user =>
             {
                 var claims = new List<Claim>()
                 {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ApiUserClaimTypes.Username, user.Username),
-                    new Claim(ApiUserClaimTypes.Password, password),
-                    new Claim(ApiUserClaimTypes.CustomerKey, user.Customer.Key),
-                    new Claim(ApiUserClaimTypes.TimeZoneId, user.Customer?.TimeZoneId ?? ""),
+                    new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new(ApiUserClaimTypes.Username, user.Username),
+                    new(ApiUserClaimTypes.Password, password),
+                    new(ApiUserClaimTypes.CustomerKey, user.Customer.Key),
+                    new(ApiUserClaimTypes.TimeZoneId, user.Customer?.TimeZoneId ?? ""),
                 };
 
                 foreach (var userRole in user.UsersInRole.Select(u => u.Role))

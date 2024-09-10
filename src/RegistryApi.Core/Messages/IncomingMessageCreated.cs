@@ -2,10 +2,7 @@
 
 using RegistryApi.SharedKernel;
 
-public class IncomingMessageCreated : DomainEventBase
+public class IncomingMessageCreated(IncomingMessage message) : DomainEventBase
 {
-    public IncomingMessageCreated(IncomingMessage message)
-        => this.IncomingMessage = message;
-
-    public IncomingMessage IncomingMessage { get; }
+    public IncomingMessage IncomingMessage { get; } = message;
 }

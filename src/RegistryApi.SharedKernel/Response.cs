@@ -1,6 +1,6 @@
-﻿using System;
+﻿namespace RegistryApi.SharedKernel;
 
-namespace RegistryApi.SharedKernel;
+using System;
 
 public abstract class Response<T>
 {
@@ -26,18 +26,10 @@ public abstract class Response<T>
     public static Response<T> Failure(Exception ex) => new FailureResponse<T>(ex);
 }
 
-public sealed class SuccessResponse<T> : Response<T>
+public sealed class SuccessResponse<T>(T result) : Response<T>(result)
 {
-    public SuccessResponse(T result)
-        : base(result)
-    {
-    }
 }
 
-public sealed class FailureResponse<T> : Response<T>
+public sealed class FailureResponse<T>(Exception exception) : Response<T>(exception)
 {
-    public FailureResponse(Exception exception)
-        : base(exception)
-    {
-    }
 }

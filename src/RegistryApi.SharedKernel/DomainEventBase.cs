@@ -1,7 +1,7 @@
-﻿using System;
-using MediatR;
+﻿namespace RegistryApi.SharedKernel;
 
-namespace RegistryApi.SharedKernel;
+using System;
+using MediatR;
 
 public abstract class DomainEventBase : INotification
 {

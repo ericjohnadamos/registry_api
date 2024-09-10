@@ -51,7 +51,7 @@ public class Create : EndpointBaseAsync
         Summary = "Creates a new user record",
         Description = "Creates a new user record",
         OperationId = "Users.Create",
-        Tags = new[] { "Users" })]
+        Tags = ["Users"])]
     public override async Task<ActionResult> HandleAsync(
         CreateUserRequest model, CancellationToken cancellationToken = default)
     {

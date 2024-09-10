@@ -21,21 +21,12 @@ public class SaveIncomingMessageService : ISaveIncomingMessageService
     public async Task SaveIncomingMessage(
         string eventName, int customerId, string message, string contact, DateTime timestamp)
     {
-        IncomingMessage incomingMessage;
-
-        // Note: Refactor this in the future by using runtime parsing
-        switch (eventName)
+        IncomingMessage incomingMessage = eventName switch
         {
-            case IncomingMessageEventType.OPT_OUT:
-                incomingMessage = IncomingMessage.CreateForOptOutEvent(customerId, contact, timestamp);
-                break;
-            case IncomingMessageEventType.MESSAGE_SENT:
-                incomingMessage = IncomingMessage.CreateForMessageSentEvent(customerId, message, timestamp);
-                break;
-            default:
-                throw new ArgumentException("Invalid event name");
-        }
-
+            IncomingMessageEventType.OPT_OUT => IncomingMessage.CreateForOptOutEvent(customerId, contact, timestamp),
+            IncomingMessageEventType.MESSAGE_SENT => IncomingMessage.CreateForMessageSentEvent(customerId, message, timestamp),
+            _ => throw new ArgumentException("Invalid event name"),
+        };
         await this.repository.SaveChangesAsync(incomingMessage);
     }
 }

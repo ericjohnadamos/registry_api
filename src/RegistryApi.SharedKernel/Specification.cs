@@ -1,7 +1,7 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿namespace RegistryApi.SharedKernel;
 
-namespace RegistryApi.SharedKernel;
+using System;
+using System.Linq.Expressions;
 
 public abstract class Specification<T>
 {
@@ -24,51 +24,30 @@ public abstract class Specification<T>
     }
 }
 
-public class AndSpecification<T> : Specification<T>
+public class AndSpecification<T>(Specification<T> left, Specification<T> right) : Specification<T>
 {
-    private readonly Specification<T> _left;
-    private readonly Specification<T> _right;
-
-    public AndSpecification(Specification<T> left, Specification<T> right)
-    {
-        _right = right;
-        _left = left;
-    }
-
     public override Expression<Func<T, bool>> ToExpression()
     {
-        var leftExpression = _left.ToExpression();
-        var rightExpression = _right.ToExpression();
-
+        var leftExpression = left.ToExpression();
+        var rightExpression = right.ToExpression();
         var paramExpr = Expression.Parameter(typeof(T));
         var exprBody = Expression.AndAlso(leftExpression.Body, rightExpression.Body);
         exprBody = (BinaryExpression) new ParameterReplacer(paramExpr).Visit(exprBody);
         var finalExpr = Expression.Lambda<Func<T, bool>>(exprBody, paramExpr);
-
         return finalExpr;
     }
 }
 
-public class OrSpecification<T> : Specification<T>
+public class OrSpecification<T>(Specification<T> left, Specification<T> right) : Specification<T>
 {
-    private readonly Specification<T> _left;
-    private readonly Specification<T> _right;
-
-    public OrSpecification(Specification<T> left, Specification<T> right)
-    {
-        _right = right;
-        _left = left;
-    }
-
     public override Expression<Func<T, bool>> ToExpression()
     {
-        var leftExpression = _left.ToExpression();
-        var rightExpression = _right.ToExpression();
+        var leftExpression = left.ToExpression();
+        var rightExpression = right.ToExpression();
         var paramExpr = Expression.Parameter(typeof(T));
         var exprBody = Expression.OrElse(leftExpression.Body, rightExpression.Body);
         exprBody = (BinaryExpression) new ParameterReplacer(paramExpr).Visit(exprBody);
         var finalExpr = Expression.Lambda<Func<T, bool>>(exprBody, paramExpr);
-
         return finalExpr;
     }
 }

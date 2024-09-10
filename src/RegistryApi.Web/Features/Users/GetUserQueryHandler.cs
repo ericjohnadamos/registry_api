@@ -12,17 +12,11 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-public class GetUserQueryHandler : IRequestHandler<GetUserQuery, Option<User, Exception>>
+public class GetUserQueryHandler(
+    IUserRepository<User> userRepository,
+    IPasswordHasher<User> passwordHasher
+) : IRequestHandler<GetUserQuery, Option<User, Exception>>
 {
-    private readonly IUserRepository<User> userRepository;
-    private readonly IPasswordHasher<User> passwordHasher;
-
-    public GetUserQueryHandler(IUserRepository<User> userRepository, IPasswordHasher<User> passwordHasher)
-    {
-        this.passwordHasher = passwordHasher;
-        this.userRepository = userRepository;
-    }
-
     public async Task<Option<User, Exception>> Handle(GetUserQuery request, CancellationToken cancellationToken)
     {
         if (   string.IsNullOrWhiteSpace(request?.Username)
@@ -33,7 +27,7 @@ public class GetUserQueryHandler : IRequestHandler<GetUserQuery, Option<User, Ex
         }
 
         var expression = new MatchingUsernameSpecification(request.Username).ToExpression();
-        var user = await this.userRepository
+        var user = await userRepository
             .GetAllAsQueryable()
             .Include(u => u.Customer)
             .Include(u => u.UsersInRole).ThenInclude(u => u.Role)
