@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\RegistryApi.Web\RegistryApi.Web.csproj" />
+    <ProjectReference Include="..\..\src\RegistryApi.Web\RegistryApi.Web.csproj" />
   </ItemGroup>
 
 </Project>
