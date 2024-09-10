@@ -4,8 +4,11 @@ This is a registry API project containing RESTful API that built with clean code
 # Getting Started
 Clone the repo.
 
+`git clone https://github.com/ericjohnadamos/registry_api.git`
+
 # Build and Test
 Open the solution in visual studio, build the project and run. It will navigate you to swagger page.
+![Swagger](./swagger.png)
 
 Alternatively, if you're not interested in debugging, you can just use the dotnet CLI from the project directory (where .csproj is).
 `dotnet build`
