@@ -1,0 +1,32 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- develop
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- script: dotnet restore
+  displayName: 'Run dotnet restore'
+- script: dotnet build -c $(buildConfiguration) --no-restore
+  displayName: 'Run dotnet build $(buildConfiguration)'
+- script: dotnet test -c $(buildConfiguration) --no-build
+  displayName: 'Run dotnet test $(buildConfiguration)'
+- script: dotnet publish src/RegistryApi.Web -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory) --no-build
+  displayName: 'Run dotnet publish'
+  condition: ne(variables['Build.Reason'], 'PullRequest')
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish build artifact'
+  condition: ne(variables['Build.Reason'], 'PullRequest')
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'

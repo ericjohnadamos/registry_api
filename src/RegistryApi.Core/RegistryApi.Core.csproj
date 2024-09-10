@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <AssemblyName>RegistryApi.Core</AssemblyName>
+    <RootNamespace>RegistryApi.Core</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RegistryApi.SharedKernel\RegistryApi.SharedKernel.csproj" />
+  </ItemGroup>
+
+</Project>

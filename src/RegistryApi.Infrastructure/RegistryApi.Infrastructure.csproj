@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>net7.0</TargetFramework>
+      <LangVersion>latest</LangVersion>
+      <Nullable>enable</Nullable>
+      <AssemblyName>RegistryApi.Infrastructure</AssemblyName>
+      <RootNamespace>RegistryApi.Infrastructure</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Users\**" />
+    <EmbeddedResource Remove="Users\**" />
+    <None Remove="Users\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.5" />
+      <PackageReference Include="MySql.EntityFrameworkCore" Version="7.0.2" />
+      <PackageReference Include="SlickTextCore" Version="1.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+      <ProjectReference Include="..\RegistryApi.Core\RegistryApi.Core.csproj" />
+      <ProjectReference Include="..\RegistryApi.SharedKernel\RegistryApi.SharedKernel.csproj" />
+  </ItemGroup>
+
+</Project>
